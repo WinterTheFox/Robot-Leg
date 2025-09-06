@@ -8,12 +8,12 @@ The simulation model is based on the following figure:
 
 The center of mass position of the first and second links are defined as follows:
 $$
-    x_1 &= x_0 + l_1 \cos(\theta_1) \\
-    z_1 &= z_0 - l_1 \sin(\theta_1)
+    x_1 = x_0 + l_1 \cos(\theta_1)
+    z_1 = z_0 - l_1 \sin(\theta_1)
 $$
 
 $$
-    x_2 &= x_0 + l_1 \cos(\theta_1) + l_2 \cos(\theta_1 + \theta_2) \\
-    z_2 &= z_0 - l_1 \sin(\theta_1) - l_2 \sin(\theta_1 + \theta_2)
+    x_2 = x_0 + l_1 \cos(\theta_1) + l_2 \cos(\theta_1 + \theta_2)
+    z_2 = z_0 - l_1 \sin(\theta_1) - l_2 \sin(\theta_1 + \theta_2)
 $$
 
