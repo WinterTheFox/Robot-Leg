@@ -1,6 +1,5 @@
-clc
-clear variables
-close all
+clc; clear variables; close all;
+
 % Parámetros del sistema
 x0 = 0.05;
 l1 = 0.2;        % longitud fija del primer eslabón (m)
@@ -52,7 +51,7 @@ for i = 1:length(t)
     zf(i) = rf(2);
 end
 
-% Animación
+%% Animation
 figure;
 for i = 1:10:length(t)
     clf;
@@ -80,3 +79,4 @@ for i = 1:10:length(t)
     title(sprintf('Tiempo = %.2f s', t(i)));
     pause(0.01);
 end
+
