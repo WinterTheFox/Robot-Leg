@@ -1,0 +1,82 @@
+clc
+clear variables
+close all
+% Parámetros del sistema
+x0 = 0.05;
+l1 = 0.2;        % longitud fija del primer eslabón (m)
+l2 = 0.2;        % longitud fija del segundo eslabón (m)
+
+% Valores de la simulación
+tf = 10;          % duración de la simulación (s)
+dt = 0.001;       % paso de tiempo
+t = 0:dt:tf;      % vector de tiempo
+
+% Calcular los ángulos iniciales para empezar como en la imagen
+thetai1 = deg2rad(20);  % Primer eslabón casi horizontal
+thetai2 = deg2rad(80);  % Segundo eslabón casi vertical
+p = x0 + l1*cos(thetai1) + l2*cos(thetai1+thetai2);
+
+% Oscilaciones pequeñas alrededor del offset
+theta1 = thetai1 + deg2rad(20) * sin(2*pi*0.5*t);  % θ1 oscila ±20° alrededor de su offset
+theta2 = thetai2 + deg2rad(20) * cos(2*pi*0.5*t);  % θ2 oscila ±20° alrededor de su offset
+
+% Prealocación
+x = zeros(size(t));
+z = zeros(size(t));
+xi = zeros(size(t));
+zi = zeros(size(t));
+xf = zeros(size(t));
+zf = zeros(size(t));
+
+% Cálculo de la posición del carro
+for i = 1:length(t)
+    % x0 = 0;        % posición fija de la base en x
+
+    % Ecuaciones del cierre del lazo cinemático
+    x(i) = x0;  % Siempre el mismo
+    z(i) = l1*sin(theta1(i)) + l2*sin(theta1(i)+theta2(i));
+    p(i) = x(i) + l1*cos(theta1(i)) + l2*cos(theta1(i)+theta2(i));
+
+    % Ecuaciones para la simulación grafica tomadas a partir de lo obtenido en la
+    % siulación numérica
+    % Ecuaciones del cierre del lazo intermedio
+    ri = [x(i) + l1*cos(theta1(i)); ...
+          z(i) - l1*sin(theta1(i))];
+    xi(i) = ri(1);
+    zi(i) = ri(2);
+
+    % Ecuaciones del cierre del lazo final
+    rf = [x(i) + l1*cos(theta1(i)) + l2*cos(theta1(i)+theta2(i)); ...
+          z(i) - l1*sin(theta1(i)) - l2*sin(theta1(i)+theta2(i))];
+    xf(i) = rf(1);
+    zf(i) = rf(2);
+end
+
+% Animación
+figure;
+for i = 1:10:length(t)
+    clf;
+    hold on;
+
+    axis([-0.2 0.3 -0.1 0.6]);  % <- AQUÍ, después de hold on
+    axis equal;                 % <- Opcional pero recomendable
+    grid on;                    % <- Si quieres también volver a activar la cuadrícula
+
+    plot([-x0 2*x0], [0 0], 'k--');        % guía horizontal
+    plot([-x0 -x0], [0 max(z)+0.5], 'k--');    % guía vertical izquierda
+    plot([2*x0 2*x0], [0 max(z)+0.5], 'k--');    % guía vertical derecha
+    
+    % Pivotes
+    plot(x(i), z(i), 'bo', 'MarkerSize', 20, 'MarkerFaceColor', 'b'); % carro
+    plot(xi(i), zi(i), 'ro', 'MarkerSize', 10, 'MarkerFaceColor', 'r'); % rodilla
+    plot(xf(i), zf(i), 'ko', 'MarkerSize', 10, 'MarkerFaceColor', 'k'); % pie
+    
+    % Dibujo de los eslabones
+    plot([x(i) xi(i)], [z(i) zi(i)], 'b-', 'LineWidth', 2); % primer eslabón
+    plot([xi(i) xf(i)], [zi(i) zf(i)], 'r-', 'LineWidth', 2); % segundo eslabón
+
+    % Pivote intermedio, base
+
+    title(sprintf('Tiempo = %.2f s', t(i)));
+    pause(0.01);
+end
