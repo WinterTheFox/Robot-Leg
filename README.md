@@ -7,5 +7,6 @@ The simulation model is based on the following figure:
 </p>
 
 The modeled reaction forces are shown by the orange lines. The dotted lines are physical rails that restrict the side movement.
+The model is obtained using a Lagrange formulation, the forces at the leg's end are considered puntual, meaning the leg is not following a trayectory while touching the floor, hence the formulation is simplified.
 
 The Dynamics simulation can be done using a PID or an included RL model, the RL model uses a DDPG agent and a supervisor, a trained agent is included.
