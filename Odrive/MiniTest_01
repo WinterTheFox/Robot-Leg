@@ -1,0 +1,16 @@
+import odrive
+import time
+
+# Buscar ODrive
+print("🔍 Buscando ODrive...")
+odrv = odrive.find_any()
+print("✅ ODrive conectado")
+
+# Pausa para asegurar conexión estable
+time.sleep(1.0)
+
+# Mostrar los atributos disponibles en el controlador del eje 0
+print("\n📋 Atributos del controlador (axis0.controller):\n")
+atributos = dir(odrv.axis0.controller.config)
+for atributo in atributos:
+    print(atributo)
